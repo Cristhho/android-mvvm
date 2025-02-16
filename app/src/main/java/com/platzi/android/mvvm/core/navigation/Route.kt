@@ -8,3 +8,16 @@ object WelcomeScreenRoute
 object GenderScreenRoute
 @Serializable
 object AgeScreenRoute
+@Serializable
+object HeightScreenRoute
+@Serializable
+object WeightScreenRoute
+@Serializable
+object ActivityLevelScreenRoute
+@Serializable
+object GoalScreenRoute
+@Serializable
+object NutrientScreenRoute
+@Serializable
+object TrackerOverviewScreenRoute
+
