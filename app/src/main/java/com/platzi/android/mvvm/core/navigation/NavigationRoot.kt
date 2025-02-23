@@ -10,11 +10,13 @@ import androidx.navigation.compose.composable
 import com.platzi.android.mvvm.presentation.onboarding.activity_level_screen.ActivityLevelScreen
 import com.platzi.android.mvvm.presentation.onboarding.age_screen.AgeScreen
 import com.platzi.android.mvvm.presentation.onboarding.gender_screen.GenderScreen
+import com.platzi.android.mvvm.presentation.onboarding.gender_screen.GenderViewModel
 import com.platzi.android.mvvm.presentation.onboarding.goal_screen.GoalScreen
 import com.platzi.android.mvvm.presentation.onboarding.height_screen.HeightScreen
 import com.platzi.android.mvvm.presentation.onboarding.nutrient_screen.NutrientGoalScreen
 import com.platzi.android.mvvm.presentation.onboarding.weight_screen.WeightScreen
 import com.platzi.android.mvvm.presentation.onboarding.welcome.WelcomeScreen
+import com.platzi.android.mvvm.presentation.tracker_overview.TrackerOverviewScreen
 
 @Composable
 fun NavigationRoot(navHostController: NavHostController) {
@@ -29,7 +31,8 @@ fun NavigationRoot(navHostController: NavHostController) {
                 WelcomeScreen { navHostController.navigate(GenderScreenRoute) }
             }
             composable<GenderScreenRoute>() {
-                GenderScreen { navHostController.navigate(AgeScreenRoute) }
+                val viewModel = GenderViewModel()
+                GenderScreen(viewModel) { navHostController.navigate(AgeScreenRoute) }
             }
             composable<AgeScreenRoute>() {
                 AgeScreen { navHostController.navigate(HeightScreenRoute) }
@@ -50,7 +53,7 @@ fun NavigationRoot(navHostController: NavHostController) {
                 NutrientGoalScreen { navHostController.navigate(TrackerOverviewScreenRoute) }
             }
             composable<TrackerOverviewScreenRoute> {
-                //TrackerOverviewScreen()
+                TrackerOverviewScreen()
             }
         }
     }
