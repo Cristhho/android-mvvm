@@ -33,8 +33,8 @@ fun GenderScreen(
     onNextClick: () -> Unit,
 ) {
     val spacing = LocalSpacing.current
-    LaunchedEffect(key1 = true) {
-        genderViewModel.uiEvent.collect {event ->
+    LaunchedEffect(true) {
+        genderViewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.Success -> onNextClick()
                 else -> Unit
@@ -102,7 +102,7 @@ fun GenderScreen(
         }
         ActionButton(
             text = stringResource(id = R.string.next),
-            onClick = { onNextClick() },
+            onClick = genderViewModel::onNext,
             modifier = Modifier.align(Alignment.BottomEnd)
         )
     }

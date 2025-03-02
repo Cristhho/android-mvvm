@@ -10,32 +10,43 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.platzi.android.mvvm.app.R
 import com.platzi.android.mvvm.app.ui.theme.LocalSpacing
 import com.platzi.android.mvvm.app.ui.theme.PlatziCaloriesTheme
+import com.platzi.android.mvvm.core.domain.util.UiEvent
 import com.platzi.android.mvvm.presentation.onboarding.components.ActionButton
 import com.platzi.android.mvvm.presentation.onboarding.components.UnitTextField
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun AgeScreen(
+    snackbarState: SnackbarHostState,
+    ageViewModel: AgeViewModel = viewModel(),
     onNextClick: () -> Unit,
 ) {
     val spacing = LocalSpacing.current
     val context = LocalContext.current
-
-    var age by mutableStateOf("20")
-
+    LaunchedEffect(true) {
+        ageViewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEvent.Success -> onNextClick()
+                is UiEvent.ShowSnackbar -> {
+                    snackbarState.showSnackbar(message = event.message.asString(context))
+                }
+                else -> Unit
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -55,14 +66,14 @@ fun AgeScreen(
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
             UnitTextField(
-                value = age,
-                onValueChange = {},
+                value = ageViewModel.age,
+                onValueChange = ageViewModel::onAgeEnter,
                 unit = stringResource(id = R.string.years)
             )
         }
         ActionButton(
             text = stringResource(id = R.string.next),
-            onClick = { onNextClick()},
+            onClick = { ageViewModel.onNextClick() },
             modifier = Modifier.align(Alignment.BottomEnd)
         )
     }
@@ -72,6 +83,6 @@ fun AgeScreen(
 @Composable
 private fun AgeScreenPreview() {
     PlatziCaloriesTheme {
-        AgeScreen {}
+        AgeScreen(snackbarState = SnackbarHostState(), AgeViewModel()) {}
     }
 }
