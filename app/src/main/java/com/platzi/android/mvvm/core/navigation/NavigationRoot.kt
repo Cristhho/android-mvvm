@@ -10,9 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.platzi.android.mvvm.presentation.onboarding.activity_level_screen.ActivityLevelScreen
 import com.platzi.android.mvvm.presentation.onboarding.age_screen.AgeScreen
-import com.platzi.android.mvvm.presentation.onboarding.age_screen.AgeViewModel
 import com.platzi.android.mvvm.presentation.onboarding.gender_screen.GenderScreen
-import com.platzi.android.mvvm.presentation.onboarding.gender_screen.GenderViewModel
 import com.platzi.android.mvvm.presentation.onboarding.goal_screen.GoalScreen
 import com.platzi.android.mvvm.presentation.onboarding.height_screen.HeightScreen
 import com.platzi.android.mvvm.presentation.onboarding.nutrient_screen.NutrientGoalScreen
@@ -22,29 +20,28 @@ import com.platzi.android.mvvm.presentation.tracker_overview.TrackerOverviewScre
 
 @Composable
 fun NavigationRoot(
+    showOnBoarding: Boolean,
     navHostController: NavHostController,
     snackbarHostState: SnackbarHostState,
 ) {
-    val genderViewModel = GenderViewModel()
-    val ageViewModel = AgeViewModel()
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         NavHost(
             navController = navHostController,
-            startDestination = WelcomeScreenRoute,
+            startDestination = if (showOnBoarding) WelcomeScreenRoute else TrackerOverviewScreenRoute,
         ) {
             composable<WelcomeScreenRoute>() {
                 WelcomeScreen { navHostController.navigate(GenderScreenRoute) }
             }
             composable<GenderScreenRoute>() {
-                GenderScreen(genderViewModel = genderViewModel) { navHostController.navigate(AgeScreenRoute) }
+                GenderScreen() { navHostController.navigate(AgeScreenRoute) }
             }
             composable<AgeScreenRoute>() {
-                AgeScreen(snackbarState = snackbarHostState, ageViewModel = ageViewModel) { navHostController.navigate(HeightScreenRoute) }
+                AgeScreen(snackbarState = snackbarHostState) { navHostController.navigate(HeightScreenRoute) }
             }
             composable<HeightScreenRoute>() {
-                HeightScreen { navHostController.navigate(WeightScreenRoute) }
+                HeightScreen(snackbarState = snackbarHostState) { navHostController.navigate(WeightScreenRoute) }
             }
             composable<WeightScreenRoute>() {
                 WeightScreen { navHostController.navigate(ActivityLevelScreenRoute) }

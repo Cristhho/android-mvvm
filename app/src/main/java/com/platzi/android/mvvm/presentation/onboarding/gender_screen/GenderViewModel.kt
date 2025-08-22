@@ -6,12 +6,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.platzi.android.mvvm.core.domain.model.Gender
+import com.platzi.android.mvvm.core.domain.preferences.Preferences
 import com.platzi.android.mvvm.core.domain.util.UiEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GenderViewModel: ViewModel() {
+@HiltViewModel
+class GenderViewModel @Inject constructor(
+    private val preferences: Preferences
+): ViewModel() {
     var selectedGender by mutableStateOf<Gender>(Gender.Male)
         private set
 
@@ -24,6 +30,7 @@ class GenderViewModel: ViewModel() {
 
     fun onNext() {
         viewModelScope.launch {
+            preferences.saveGender(selectedGender)
             _uiEvent.send(UiEvent.Success)
         }
     }

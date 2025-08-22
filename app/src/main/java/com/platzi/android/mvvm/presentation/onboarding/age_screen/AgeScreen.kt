@@ -18,11 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.platzi.android.mvvm.app.R
 import com.platzi.android.mvvm.app.ui.theme.LocalSpacing
-import com.platzi.android.mvvm.app.ui.theme.PlatziCaloriesTheme
 import com.platzi.android.mvvm.core.domain.util.UiEvent
 import com.platzi.android.mvvm.presentation.onboarding.components.ActionButton
 import com.platzi.android.mvvm.presentation.onboarding.components.UnitTextField
@@ -31,7 +29,7 @@ import com.platzi.android.mvvm.presentation.onboarding.components.UnitTextField
 @Composable
 fun AgeScreen(
     snackbarState: SnackbarHostState,
-    ageViewModel: AgeViewModel = viewModel(),
+    ageViewModel: AgeViewModel = hiltViewModel(),
     onNextClick: () -> Unit,
 ) {
     val spacing = LocalSpacing.current
@@ -76,13 +74,5 @@ fun AgeScreen(
             onClick = { ageViewModel.onNextClick() },
             modifier = Modifier.align(Alignment.BottomEnd)
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun AgeScreenPreview() {
-    PlatziCaloriesTheme {
-        AgeScreen(snackbarState = SnackbarHostState(), AgeViewModel()) {}
     }
 }
