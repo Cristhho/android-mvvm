@@ -9,23 +9,40 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.platzi.android.mvvm.app.R
 import com.platzi.android.mvvm.app.ui.theme.LocalSpacing
+import com.platzi.android.mvvm.core.domain.util.UiEvent
 import com.platzi.android.mvvm.presentation.onboarding.components.ActionButton
 import com.platzi.android.mvvm.presentation.onboarding.components.UnitTextField
 
 @Composable
 fun WeightScreen(
+    snackbarState: SnackbarHostState,
+    weightViewModel: WeightViewModel = hiltViewModel(),
     onNextClick: () -> Unit
 ) {
     val spacing = LocalSpacing.current
     val context = LocalContext.current
+    LaunchedEffect(true) {
+        weightViewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEvent.Success -> onNextClick()
+                is UiEvent.ShowSnackbar -> {
+                    snackbarState.showSnackbar(event.message.asString(context))
+                }
+                else -> Unit
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -45,14 +62,14 @@ fun WeightScreen(
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
             UnitTextField(
-                value = "180",
-                onValueChange = {},
+                value = weightViewModel.weight,
+                onValueChange = weightViewModel::onWeightEnter,
                 unit = stringResource(id = R.string.kg)
             )
         }
         ActionButton(
             text = stringResource(id = R.string.next),
-            onClick = { onNextClick() },
+            onClick = weightViewModel::onNextClick,
             modifier = Modifier.align(Alignment.BottomEnd)
         )
     }
