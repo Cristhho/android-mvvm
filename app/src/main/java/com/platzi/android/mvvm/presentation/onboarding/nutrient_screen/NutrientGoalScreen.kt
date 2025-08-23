@@ -3,23 +3,45 @@ package com.platzi.android.mvvm.presentation.onboarding.nutrient_screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.platzi.android.mvvm.app.ui.theme.LocalSpacing
 import com.platzi.android.mvvm.app.R
+import com.platzi.android.mvvm.core.domain.util.UiEvent
 import com.platzi.android.mvvm.presentation.onboarding.components.ActionButton
 import com.platzi.android.mvvm.presentation.onboarding.components.UnitTextField
 
 @Composable
 fun NutrientGoalScreen(
+    snackbarState: SnackbarHostState,
+    nutrientGoalViewModel: NutrientGoalViewModel = hiltViewModel(),
     onNextClick: () -> Unit
 ) {
     val spacing = LocalSpacing.current
     val context = LocalContext.current
+    LaunchedEffect(key1 = true) {
+        nutrientGoalViewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEvent.Success -> onNextClick()
+                is UiEvent.ShowSnackbar -> {
+                    snackbarState.showSnackbar(
+                        message = event.message.asString(context)
+                    )
+                }
+
+                else -> Unit
+            }
+        }
+    }
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -38,25 +60,25 @@ fun NutrientGoalScreen(
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
             UnitTextField(
-                value = "40",
+                value = nutrientGoalViewModel.state.carbsRatio,
                 onValueChange = {
-
+                    nutrientGoalViewModel.onEvent(NutrientGoalEvent.OnCarbRatioEnter(it))
                 },
                 unit = stringResource(id = R.string.percent_carbs)
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
             UnitTextField(
-                value = "30",
+                value = nutrientGoalViewModel.state.proteinRatio,
                 onValueChange = {
-
+                    nutrientGoalViewModel.onEvent(NutrientGoalEvent.OnProteinRatioEnter(it))
                 },
                 unit = stringResource(id = R.string.percent_proteins)
             )
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
             UnitTextField(
-                value = "30",
+                value = nutrientGoalViewModel.state.fatRatio,
                 onValueChange = {
-
+                    nutrientGoalViewModel.onEvent(NutrientGoalEvent.OnFatRatioEnter(it))
                 },
                 unit = stringResource(id = R.string.percent_fats)
             )
@@ -64,7 +86,7 @@ fun NutrientGoalScreen(
         ActionButton(
             text = stringResource(id = R.string.next),
             onClick = {
-                onNextClick()
+                nutrientGoalViewModel.onEvent(NutrientGoalEvent.OnNextClick)
             },
             modifier = Modifier.align(Alignment.BottomEnd)
         )

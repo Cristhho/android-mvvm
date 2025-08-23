@@ -10,6 +10,6 @@ class TrackerOverviewViewModel  @Inject constructor(
     preferences: Preferences
 ): ViewModel() {
     init {
-        preferences.saveShouldShowOnboarding(false)
+        preferences.saveShouldShowOnboarding(true)
     }
 }

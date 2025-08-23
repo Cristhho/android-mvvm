@@ -53,7 +53,7 @@ fun NavigationRoot(
                 GoalScreen { navHostController.navigate(NutrientScreenRoute) }
             }
             composable<NutrientScreenRoute>() {
-                NutrientGoalScreen { navHostController.navigate(TrackerOverviewScreenRoute) }
+                NutrientGoalScreen(snackbarState = snackbarHostState) { navHostController.navigate(TrackerOverviewScreenRoute) }
             }
             composable<TrackerOverviewScreenRoute> {
                 TrackerOverviewScreen()
