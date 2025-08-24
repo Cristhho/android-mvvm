@@ -16,6 +16,7 @@ import com.platzi.android.mvvm.presentation.onboarding.height_screen.HeightScree
 import com.platzi.android.mvvm.presentation.onboarding.nutrient_screen.NutrientGoalScreen
 import com.platzi.android.mvvm.presentation.onboarding.weight_screen.WeightScreen
 import com.platzi.android.mvvm.presentation.onboarding.welcome.WelcomeScreen
+import com.platzi.android.mvvm.presentation.search.SearchScreen
 import com.platzi.android.mvvm.presentation.tracker_overview.TrackerOverviewScreen
 
 @Composable
@@ -56,7 +57,16 @@ fun NavigationRoot(
                 NutrientGoalScreen(snackbarState = snackbarHostState) { navHostController.navigate(TrackerOverviewScreenRoute) }
             }
             composable<TrackerOverviewScreenRoute> {
-                TrackerOverviewScreen()
+                TrackerOverviewScreen() { navHostController.navigate(SearchScreenRoute) }
+            }
+            composable<SearchScreenRoute> {
+                SearchScreen(
+                    snackbarHostState = snackbarHostState,
+                    mealName = "Meal Name",
+                    dayOfMonth = 1,
+                    month = 1,
+                    year = 2025,
+                ) { }
             }
         }
     }
