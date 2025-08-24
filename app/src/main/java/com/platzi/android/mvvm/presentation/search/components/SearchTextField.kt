@@ -72,7 +72,7 @@ fun SearchTextField(
                 .onFocusChanged { onFocusChanged(it) }
                 .testTag("search_textfield")
         )
-        if(shouldShowHint) {
+        if(shouldShowHint && text.isBlank()) {
             Text(
                 text = hint,
                 style = MaterialTheme.typography.bodyLarge,

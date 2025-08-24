@@ -66,7 +66,7 @@ fun NavigationRoot(
                     dayOfMonth = 1,
                     month = 1,
                     year = 2025,
-                ) { }
+                ) { navHostController.navigateUp() }
             }
         }
     }
