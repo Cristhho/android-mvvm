@@ -1,5 +1,8 @@
 package com.platzi.android.mvvm.app.data.di
 
+import android.app.Application
+import androidx.room.Room
+import com.platzi.android.mvvm.app.data.local.database.TrackerDatabase
 import com.platzi.android.mvvm.app.data.remote.api.OpenFoodApi
 import com.platzi.android.mvvm.app.data.remote.repository.TrackerRepositoryImpl
 import com.platzi.android.mvvm.app.domain.tracker.repository.TrackerRepository
@@ -52,9 +55,20 @@ object TrackableDataModule {
 
     @Provides
     @Singleton
+    fun provideTrackerDatabase(app: Application): TrackerDatabase {
+        return Room.databaseBuilder(
+            app,
+            TrackerDatabase::class.java,
+            "tracker_db"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
     fun provideTrackerRepository(
-        openFoodApi: OpenFoodApi
+        openFoodApi: OpenFoodApi,
+        db: TrackerDatabase
     ): TrackerRepository {
-        return TrackerRepositoryImpl(openFoodApi)
+        return TrackerRepositoryImpl(openFoodApi, db.dao)
     }
 }

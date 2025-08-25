@@ -14,7 +14,7 @@ class TrackerOverviewViewModel  @Inject constructor(
     private val trackerUseCase: TrackerUseCase
 ): ViewModel() {
     init {
-        preferences.saveShouldShowOnboarding(true)
+        preferences.saveShouldShowOnboarding(false)
         executeSearch()
     }
 

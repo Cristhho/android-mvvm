@@ -70,6 +70,34 @@ class SearchViewModel @Inject constructor(
                     }
                 )
             }
+            is SearchEvent.OnAmountForFoodChange -> {
+                state = state.copy(
+                    trackableFood = state.trackableFood.map {
+                        if (it.food == event.food) it.copy(amount = filterOutDigits(event.amount))
+                        else it
+                    }
+                )
+            }
+            is SearchEvent.OnTrackFoodClick -> {
+                trackFood(event)
+            }
+        }
+    }
+
+    private fun trackFood(event: SearchEvent.OnTrackFoodClick) {
+        viewModelScope.launch {
+            val uiState = state.trackableFood.find { it.food == event.food }
+            trackerUseCases.trackFoodUseCase(
+                food = uiState?.food ?: return@launch,
+                amount = uiState.amount.toIntOrNull() ?: return@launch,
+                mealType = event.mealType,
+                date = event.date
+            )
+            state = state.copy(trackableFood = state.trackableFood.map {
+                if (it.food == event.food) it.copy(isExpanded = false)
+                else it
+            })
+            _uiEvent.send(UiEvent.NavigateUp)
         }
     }
 
