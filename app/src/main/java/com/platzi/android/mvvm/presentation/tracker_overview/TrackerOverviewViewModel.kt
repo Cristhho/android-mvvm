@@ -47,6 +47,20 @@ class TrackerOverviewViewModel  @Inject constructor(
                     }
                 )
             }
+            is TrackerOverviewEvent.OnDeleteTrackedFoodClick -> {
+                viewModelScope.launch {
+                    trackerUseCase.deleteTrackedFoodUseCase(event.trackedFood)
+                    refreshFoods()
+                }
+            }
+            is TrackerOverviewEvent.OnNextDayClick -> {
+                state = state.copy(date = state.date.plusDays(1))
+                refreshFoods()
+            }
+            is TrackerOverviewEvent.OnPreviousDayClick -> {
+                state = state.copy(date = state.date.minusDays(1))
+                refreshFoods()
+            }
         }
     }
 

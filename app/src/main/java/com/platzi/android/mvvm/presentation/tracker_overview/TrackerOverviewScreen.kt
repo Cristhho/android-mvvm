@@ -39,12 +39,12 @@ fun TrackerOverviewScreen(
             NutrientHeader(trackerViewModel.state)
             Spacer(modifier = Modifier.height(spacing.spaceMedium))
             DaySelector(
-                date = LocalDate.now(),
+                date = state.date,
                 onPreviousDayClick = {
-
+                    trackerViewModel.onEvent(TrackerOverviewEvent.OnPreviousDayClick)
                 },
                 onNextDayClick = {
-
+                    trackerViewModel.onEvent(TrackerOverviewEvent.OnNextDayClick)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -70,7 +70,9 @@ fun TrackerOverviewScreen(
                     foods.forEach { food ->
                         TrackedFoodItem(
                             trackedFood = food
-                        ) {}
+                        ) {
+                            trackerViewModel.onEvent(TrackerOverviewEvent.OnDeleteTrackedFoodClick(food))
+                        }
                         Spacer(modifier = Modifier.height(spacing.spaceMedium))
                     }
                     AddButton(

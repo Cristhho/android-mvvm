@@ -2,6 +2,7 @@ package com.platzi.android.mvvm.app.domain.tracker.di
 
 import com.platzi.android.mvvm.app.domain.tracker.repository.TrackerRepository
 import com.platzi.android.mvvm.app.domain.tracker.use_case.CalculateMealNutrientsUseCase
+import com.platzi.android.mvvm.app.domain.tracker.use_case.DeleteTrackedFoodUseCase
 import com.platzi.android.mvvm.app.domain.tracker.use_case.GetFoodsForDateUseCase
 import com.platzi.android.mvvm.app.domain.tracker.use_case.SearchFoodUseCase
 import com.platzi.android.mvvm.app.domain.tracker.use_case.TrackFoodUseCase
@@ -26,7 +27,8 @@ object TrackerDomainModule {
             searchFoodUseCase = SearchFoodUseCase(trackerRepository),
             trackFoodUseCase = TrackFoodUseCase(trackerRepository),
             getFoodsForDateUseCase = GetFoodsForDateUseCase(trackerRepository),
-            calculateMealNutrientsUseCase = CalculateMealNutrientsUseCase(preferences)
+            calculateMealNutrientsUseCase = CalculateMealNutrientsUseCase(preferences),
+            deleteTrackedFoodUseCase = DeleteTrackedFoodUseCase(trackerRepository)
         )
     }
 }

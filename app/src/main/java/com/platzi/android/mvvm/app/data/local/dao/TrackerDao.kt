@@ -1,6 +1,7 @@
 package com.platzi.android.mvvm.app.data.local.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -17,4 +18,7 @@ interface TrackerDao {
         WHERE dayOfMonth = :day AND month = :month AND year = :year
     """)
     fun getFoodByDate(day: Int, month: Int, year: Int): Flow<List<TrackedFoodEntity>>
+
+    @Delete
+    suspend fun deleteTrackedFood(trackedFoodEntity: TrackedFoodEntity)
 }
