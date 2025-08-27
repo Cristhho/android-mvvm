@@ -21,13 +21,14 @@ import com.platzi.android.mvvm.presentation.tracker_overview.components.AddButto
 import com.platzi.android.mvvm.presentation.tracker_overview.components.DaySelector
 import com.platzi.android.mvvm.presentation.tracker_overview.components.ExpandableMeal
 import com.platzi.android.mvvm.presentation.tracker_overview.components.NutrientHeader
+import com.platzi.android.mvvm.presentation.tracker_overview.components.TrackedFoodItem
 import com.platzi.android.mvvm.presentation.tracker_overview.model.defaultMeals
 import java.time.LocalDate
 
 @Composable
 fun TrackerOverviewScreen(
     trackerViewModel: TrackerOverviewViewModel = hiltViewModel(),
-    onNavigate: () -> Unit
+    onNavigate: (String, Int, Int, Int) -> Unit
 ) {
     val spacing = LocalSpacing.current
     val context = LocalContext.current
@@ -67,6 +68,9 @@ fun TrackerOverviewScreen(
                         it.mealType == meal.mealType
                     }
                     foods.forEach { food ->
+                        TrackedFoodItem(
+                            trackedFood = food
+                        ) {}
                         Spacer(modifier = Modifier.height(spacing.spaceMedium))
                     }
                     AddButton(
@@ -75,7 +79,7 @@ fun TrackerOverviewScreen(
                             meal.name.asString(context)
                         ),
                         onClick = {
-                            onNavigate()
+                            onNavigate(meal.name.asString(context), state.date.dayOfMonth, state.date.monthValue, state.date.year)
                         },
                         modifier = Modifier.fillMaxWidth()
                     )

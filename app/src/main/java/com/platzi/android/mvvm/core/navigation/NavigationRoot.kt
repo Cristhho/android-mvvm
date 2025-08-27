@@ -57,15 +57,22 @@ fun NavigationRoot(
                 NutrientGoalScreen(snackbarState = snackbarHostState) { navHostController.navigate(TrackerOverviewScreenRoute) }
             }
             composable<TrackerOverviewScreenRoute> {
-                TrackerOverviewScreen() { navHostController.navigate(SearchScreenRoute) }
+                TrackerOverviewScreen() { meal, day, month, year ->
+                    navHostController.navigate(SearchScreenRoute(meal, day, month, year)) }
             }
-            composable<SearchScreenRoute> {
+            composable<SearchScreenRoute> { navBackStackEntry ->
+                val args = navBackStackEntry.arguments
+                val mealName = args?.getString("mealName") ?: ""
+                val dayOfMonth = args?.getInt("dayOfMonth") ?: 0
+                val month = args?.getInt("month") ?: 0
+                val year = args?.getInt("year") ?: 0
+
                 SearchScreen(
                     snackbarHostState = snackbarHostState,
-                    mealName = "Meal Name",
-                    dayOfMonth = 1,
-                    month = 1,
-                    year = 2025,
+                    mealName = mealName,
+                    dayOfMonth = dayOfMonth,
+                    month = month,
+                    year = year,
                 ) { navHostController.navigateUp() }
             }
         }
