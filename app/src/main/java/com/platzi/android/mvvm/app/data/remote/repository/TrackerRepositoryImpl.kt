@@ -1,12 +1,16 @@
 package com.platzi.android.mvvm.app.data.remote.repository
 
 import com.platzi.android.mvvm.app.data.local.dao.TrackerDao
+import com.platzi.android.mvvm.app.data.local.mapper.toTrackedFood
 import com.platzi.android.mvvm.app.data.local.mapper.toTrackedFoodEntity
 import com.platzi.android.mvvm.app.data.remote.api.OpenFoodApi
 import com.platzi.android.mvvm.app.data.remote.mapper.toTrackableFood
 import com.platzi.android.mvvm.app.domain.tracker.model.TrackableFood
 import com.platzi.android.mvvm.app.domain.tracker.model.TrackedFood
 import com.platzi.android.mvvm.app.domain.tracker.repository.TrackerRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 
 class TrackerRepositoryImpl(
     private val api: OpenFoodApi,
@@ -44,5 +48,14 @@ class TrackerRepositoryImpl(
 
     override suspend fun insertFood(food: TrackedFood) {
         dao.insertTrackedFood(food.toTrackedFoodEntity())
+    }
+
+    override fun getFoodByDate(localDate: LocalDate): Flow<List<TrackedFood>> {
+        return dao.getFoodByDate(localDate.dayOfMonth, localDate.monthValue, localDate.year)
+            .map { entities ->
+                entities.map {
+                    it.toTrackedFood()
+                }
+            }
     }
 }

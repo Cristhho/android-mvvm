@@ -2,5 +2,7 @@ package com.platzi.android.mvvm.app.domain.tracker.use_case
 
 data class TrackerUseCase(
     val searchFoodUseCase: SearchFoodUseCase,
-    val trackFoodUseCase: TrackFoodUseCase
+    val trackFoodUseCase: TrackFoodUseCase,
+    val getFoodsForDateUseCase: GetFoodsForDateUseCase,
+    val calculateMealNutrientsUseCase: CalculateMealNutrientsUseCase
 )
